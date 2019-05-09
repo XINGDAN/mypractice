@@ -1,5 +1,6 @@
 import requests
-
+import pytest
+'''
 #def get_top_stock():
 myheaders = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0'}
 url = "https://xueqiu.com/service/v5/stock/screener/quote/list"
@@ -19,3 +20,20 @@ print(r.status_code)
 # url = "https://xueqiu.com/service/v5/stock/screener/quote/list?type=sha&order_by=percent&order=desc&size=10&page=1&_=1555054946846"
 # para = {'type':'sha','order_by':'percent','size':'10','page':'1','_':1555054946846}
 #r = requests.get(url,verify=False,headers=myheaders,playod=para)
+
+'''
+
+@pytest.mark.parametrize("size",[-1,3,21,100])
+#@pytest.mark.parametrize("size",[3])
+def test_top_stock(size):
+    myheaders = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0'}
+    url = "https://xueqiu.com/service/v5/stock/screener/quote/list"
+
+    payload = {'type':'sha','order_by':'percent','order':'desc','size':str(size),"page":'1','_':'1557223888465'}
+    r = requests.get(url,verify=False,headers=myheaders,params=payload)
+
+    No_one1 = r.json().get("data").get("list")[0].get("percent")
+    print(r.json().get("data").get("list")[0].get("percent"))
+    assert No_one1 > 9.9
+
+
